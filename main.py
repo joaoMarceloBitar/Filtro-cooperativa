@@ -30,6 +30,9 @@ def build_approved_requests_csv() -> bool:
     except json.JSONDecodeError as error:
         log(f"erro: JSON inválido na linha {error.lineno}, coluna {error.colno}")
         return False
+    except TypeError as error:
+        log(f"erro: estrutura do JSON inválida: {error}")
+        return False
     except OSError as error:
         log(f"erro: falha ao ler ou gravar arquivo: {error}")
         return False

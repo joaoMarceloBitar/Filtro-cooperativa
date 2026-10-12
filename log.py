@@ -2,7 +2,7 @@ from datetime import datetime
 
 LOG_PATH = "processamento.log"
 
-def log(message: str) -> None:
+def log(message: str):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     line = f"{timestamp} | {message}"
     print(line)
