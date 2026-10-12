@@ -30,7 +30,8 @@ Ao executar o main.py, o programa limpa o processamento.log da execução anteri
 - Priorizei bibliotecas nativas do python para que o projeto rode sem instalar dependências. Para validação de dados e typesafety, por exemplo, poderia ser utilizado pydantic, que já utilizei em outros projetos.
 
 ## Pré-requisitos
-Python 3.11 ou superior
+- Python 3.11 ou superior
+- pytest, apenas para executar os testes (listado no requirements.txt). O programa em si utiliza somente bibliotecas nativas
 
 ## Instruções para executar o projeto
 1. Abra um terminal na pasta do projeto. Os caminhos dos arquivos são relativos, então o programa deve ser executado a partir dela.
@@ -40,6 +41,24 @@ Python 3.11 ou superior
 Ao final da execução, são gerados na mesma pasta:
 - aprovados.csv: registros aprovados com CPF preenchido, com as colunas id, nome e cpf
 - processamento.log: registro da execução (também exibido no terminal)
+
+### Executar os testes
+1. (Opcional) Crie e ative um ambiente virtual:
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+2. Instale as dependências:
+pip install -r requirements.txt
+3. Execute os testes:
+python -m pytest -v
+
+## Testes
+Os testes unitários ficam na pasta tests, com um arquivo por módulo testado:
+- test_normalizer.py: regras de validação e conversão dos registros (registro completo normalizado, campo obrigatório ausente, id booleano, CPF nulo, numérico ou com menos de 11 dígitos e status desconhecido)
+- test_processor.py: regras de negócio (filtro de status, filtro de CPF e os dois filtros combinados)
+
+Os testes se concentram no normalizer e no processor porque são os módulos que recebem e devolvem dados, sem depender de arquivos, e concentram as regras descritas nas premissas. A leitura do arquivo (reader) e o fluxo completo (main) não têm testes automatizados
+
+O arquivo conftest.py faz cada teste ser executado em uma pasta temporária, para que o log gerado durante os testes não altere os arquivos do projeto.
 
 ## Premissas adotadas
 - O arquivo de entrada deve conter uma lista de registros; qualquer outro conteúdo (objeto, número, null) interrompe a execução
@@ -64,7 +83,7 @@ Foram usadas as seguintes ferramentas:
     - Discussões sobre abordagens de solução
     - Validação estrutural do projeto principalmente relacionadas à divisão de responsabilidades
     - "Traduzir" minha experiência profissional usando Typescript para o que faz sentido ser aplicado em Python(conceitos mais profundos de POO por exemplo, que costumo prezar por seguir visando um código escalável)
-    - Expandir a cobertura de exceções capturadas e testes do projeto, me ajudando a entender quais possibilidades ainda não foram cobertas
+    - Expandir a cobertura de exceções capturadas, me ajudando a entender quais possibilidades ainda não foram cobertas
     - implementação e correção dos logs(sob minha revisão)
     - verificação de bugs silenciosos
     - Auxílio de redação e revisão ortográfica e gramatical do readme
@@ -73,6 +92,7 @@ Foram usadas as seguintes ferramentas:
 Conceitos do projeto que não são autorais ou resultado de discussões de arquitetura, mas sim, propostas geradas pelo claude que foram acatadas no projeto:
 - Retorno booleano de build_approved_requests_csv que possibilita encerrar a execução do programa com um código de erro
 - Exceção de erros de estrutura de dados carregados
+- Testes unitários: a configuração do pytest e o código dos testes foram implementados pelo Claude, com minha revisão e definição de escopo.
 
 ## Integração com processos
 Como você adaptaria essa solução para um processo de BPM, no qual os registros fossem
