@@ -1,4 +1,5 @@
 import json
+from dataclasses import replace
 from models import Request
 from log import log
 
@@ -10,6 +11,7 @@ def requests_parser(requests: list):
         except TypeError as error:
             log(f"registro ignorado (dado bruto inválido): {request}, {error}")
             continue
+        parsed_request = replace(parsed_request, id=str(parsed_request.id))
         parsed_requests.append(parsed_request)
     return parsed_requests
 
