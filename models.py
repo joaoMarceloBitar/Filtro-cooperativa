@@ -12,3 +12,9 @@ class Request:
     nome: str
     cpf: str
     status: Status
+
+@dataclass
+class ProcessingSummary:
+    read: int = 0
+    exported: int = 0
+    ignored: int = 0
